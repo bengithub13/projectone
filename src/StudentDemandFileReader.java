@@ -11,11 +11,16 @@ import java.util.Set;
 public class StudentDemandFileReader {
 
 	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
+	private HashMap<Integer, Set<Integer>> coursesTotalDemandHashMap;
+	
 	private String csvFileName;
+	private int numberOfStudent=0;
 
 	public StudentDemandFileReader(String csvFileName) {
 		super();
 		this.csvFileName = csvFileName;
+		coursesPerStudentHashMap=new HashMap<Integer,Set<Integer>>();
+		coursesTotalDemandHashMap=new HashMap<Integer,Set<Integer>>();
 	}
 
 	/*
@@ -40,7 +45,8 @@ public class StudentDemandFileReader {
 
 				String[] studentRow = line.split(cvsSplitBy);
 				studentDemandRows.add(studentRow);
-			//	addToStudentHashMap(studentRow);
+				addToStudentHashMap(studentRow);
+				addToCourseDemandHashMap(studentRow);
 
 				// System.out.println("Student row: [student id= " +
 				// studentRow[0]
@@ -73,16 +79,69 @@ public class StudentDemandFileReader {
 	 */
 	private void addToStudentHashMap(String[] studentRow) {
 		// TODO Auto-generated method stub
-		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentRow[0]);
+		
 		int studentNumber = Integer.parseInt(studentRow[0]);
 		int courseNumber = Integer.parseInt(studentRow[1]);
+		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
 		if (coursesSet == null) {
+			addNumOfStudents();
 			coursesSet = new HashSet<Integer>();
+			coursesSet.add(courseNumber);
 		} else {
-			coursesSet.add(studentNumber);
+			coursesSet.add(courseNumber);
 		}
 
 		coursesPerStudentHashMap.put(studentNumber, coursesSet);
 
 	}
+	
+	private void addToCourseDemandHashMap(String[] studentRow) {
+		// TODO Auto-generated method stub
+		
+		int studentNumber = Integer.parseInt(studentRow[0]);
+		int courseNumber = Integer.parseInt(studentRow[1]);
+		Set<Integer> studentSet = coursesTotalDemandHashMap.get(courseNumber);
+		if (studentSet == null) {
+			studentSet = new HashSet<Integer>();
+			studentSet.add(studentNumber);
+		} else {
+			studentSet.add(studentNumber);
+		}
+
+		coursesTotalDemandHashMap.put(courseNumber, studentSet);
+
+	}
+	
+	public Integer[] getCoursesForStudent(int studentNumber){
+		HashSet<Integer> coursesSet = (HashSet<Integer>) coursesPerStudentHashMap.get(studentNumber);
+		if (coursesSet==null)
+		return null;
+		else
+			return  coursesSet.toArray(new Integer[coursesSet.size()]);
+	}
+	
+	
+	public boolean isCourseDemandByStudent(int studentNumber, int courseNumber){
+		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
+		if (coursesSet == null) {
+		return false;
+		}
+		else if  (coursesSet.contains(courseNumber)){
+			return true;
+		}
+		return false;
+	}
+	
+	private void addNumOfStudents(){
+		numberOfStudent++;
+	}
+	
+	
+	
+	public int getNumOfStudents(){
+		
+		return numberOfStudent;
+		
+	};
+	
 }
