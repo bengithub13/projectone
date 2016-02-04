@@ -46,7 +46,7 @@ public class StudentDemandFileReader {
 				String[] studentRow = line.split(cvsSplitBy);
 				studentDemandRows.add(studentRow);
 				addToStudentHashMap(studentRow);
-				addToCourseDemandHashMap(studentRow);
+				addToCourseDemandHashMap(studentRow); 
 
 				// System.out.println("Student row: [student id= " +
 				// studentRow[0]

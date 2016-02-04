@@ -14,7 +14,24 @@ public class Project1Scheduler implements Scheduler {
     private static final int TOTAL_SEMESTERS=12;
     private GRBVar[][][] studentCourseSemester;		               // what happens to the results
     private List<String[]> studentDemandMatrix;
-    
+    private final Integer[][] courseAvailability=new Integer[][]{
+    	{},										//place holder to start index off as 1
+    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall semester 1
+    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
+    	{0,2,3,4,6,8,9,12,13},					//summer
+    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall
+    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
+    	{0,2,3,4,6,8,9,12,13},					//summer
+    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall
+    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
+    	{0,2,3,4,6,8,9,12,13},					//summer
+    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall
+    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
+    	{0,2,3,4,6,8,9,12,13},					//summer semester 12
+    };					
+    private final Integer[][] coursePrerequisite=new Integer[][]{
+    	{4,16},{4,16},{12,1},{9,13},{3,7}       // {rerequisite, course dependant on rerequsite}
+    };
     
     private void setStudentDemandFileReader(StudentDemandFileReader studentDemandFileReader){
     	this.studentDemandFileReader=studentDemandFileReader;
@@ -43,6 +60,7 @@ public class Project1Scheduler implements Scheduler {
 						String varName="studentCourseSemester"+i+j+k;
 						
 						if (studentDemandFileReader.isCourseDemandByStudent(i, j)){
+				//		if ((studentDemandFileReader.isCourseDemandByStudent(i, j)) && (isCourseAvailableInSemester(k, j))){
 									studentCourseSemester[i][j][k]=model.addVar(0.0, 1.0, 0.0, GRB.BINARY,varName);
 									System.out.println( "setting GRBVAR- max value = 1 - name= "+varName  );
 						}			
@@ -69,27 +87,7 @@ public class Project1Scheduler implements Scheduler {
             GRBLinExpr expr = new GRBLinExpr();
             System.out.print( " Set Objective : minimize " );
             expr.addTerm(1.0,x);
-           /*
-			for (int i=1;i<=studentDemandFileReader.getNumOfStudents();i++){  //loop through each student
-				for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course 
-					for (int k=1;k<=TOTAL_SEMESTERS;k++){  //loop through each semester
-						String varName="Y"+i+j+k;
-//	if student wants to take course set to 1 else set to 0 since we do not want to consider it .
-						
-						if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
-						expr.addTerm( 1,studentCourseSemester[i][j][k]);
-						System.out.print( " - name= "+ "1Y"+i+j+k);
-						}
-						else{
-							expr.addTerm( 0,studentCourseSemester[i][j][k]);
-							System.out.print( " - name= "+ "0Y"+i+j+k);
-		
-						}
-					}
-				}
-				
-			}
-        */  
+  
           
             
 	  model.setObjective(expr, GRB.MINIMIZE);
@@ -123,7 +121,8 @@ public class Project1Scheduler implements Scheduler {
 				}
 				
 				}
-		  
+
+/*			commnet out- dont think we need this anymore due to constraint to ensure all courses requested by student=1  
  //****************constraint - student cant take course more than once  ******************************************************************			  
 			  System.out.println();
 			  System.out.print( " Set constraint2 : " );
@@ -153,7 +152,7 @@ public class Project1Scheduler implements Scheduler {
 				
 				}
 		  
-
+*/
 	  
  //*********************CONSTRAINT each class has to be <=x *************************************************************			  
 			
@@ -198,8 +197,8 @@ public class Project1Scheduler implements Scheduler {
 		  
 	
 
-	
-	// constraint number of students at any time less than equal to X per course in a semester
+//*********************CONSTRAINT make sure each student takes all their requested courses  *************************************************************			  
+
 	 
 				  	for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student	
 	 					// add constraint for each course number for student
@@ -220,19 +219,81 @@ public class Project1Scheduler implements Scheduler {
 	  //GRBLinExpr constraint = new GRBLinExpr();
 	  //constraint.addConstant(5.0);		  
 	 // model.addConstr(constraint,GRB.LESS_EQUAL,x,"testing");
-	  
-	  
+//*******************************************************************************************
+//***** constraint- course availabity certain course only available certain semesters********				  	
+//all classes that are not available in a semester should add to 0					 
+				  	for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student	
+	 					// add constraint for each course number for student
+				  		
+				  		for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){
+				  			GRBLinExpr constraint = new GRBLinExpr();
+				  			 String constraintName="constraint5-  "+"student#"+i+"course#"+j;
+				  			for (int k=1;k<=TOTAL_SEMESTERS;k++){
+				  				if (!(isCourseAvailableInSemester(k, j)))				  				
+				  			constraint.addTerm( 1,studentCourseSemester[i][j][k]);
+				  			}
+				  			model.addConstr(constraint,GRB.EQUAL,0,constraintName);
+				  		}
+				  		
+				  	}   
+				  	
+  
 	  
 	  
             model.optimize();
-
+//*******************************************************************************************
+//  a student can not take a course before prerequisite  - a course cano not be taken semester 1 if prereq is required
+            int courseNum=0;
+            String constraintName=null;
+            GRBLinExpr constraint = new GRBLinExpr();
+          	for (int i=1;i<=studentCourseSemester.length-1;i++){   
+		  	for (int j=0;j<=coursePrerequisite.length-1;j++){  
+		  		 courseNum=coursePrerequisite[j][1];
+	  			 	constraintName="constraint_prereq1-  "+"student#"+i+"course#"+courseNum;
+		  		
+		  			for (int k=1;k<=TOTAL_SEMESTERS;k++){
+		  							  				
+		  			constraint.addTerm( 1,studentCourseSemester[i][courseNum][1]);    //course can't start at semester 1 if dependant on rerequisite
+		  			}	  			
+		  		}	  		
+		  	}  
             
+          	model.addConstr(constraint,GRB.EQUAL,0,constraintName);
+         
+          	
+          //*******************************************************************************************
+        //  a student can not take a course before prerequisite  from semester 2-max semester
+        // a course that depends on a prerequisite Yijk + sum of all prerequistes for Yijk..Yij12<2 .
+          
+            
+          	for (int i=1;i<=studentCourseSemester.length-1;i++){   
+		  	for (int j=0;j<=coursePrerequisite.length-1;j++){  //prerequisite/course matrix 
+		  			Integer preReqCourseNum=coursePrerequisite[j][0];
+		  			courseNum=coursePrerequisite[j][1];
+	  			 	constraintName="constraint_prereq2-  "+"student#"+i+"course#"+courseNum;
+	  			 	
+		  			for (int k=2;k<=TOTAL_SEMESTERS;k++){
+		  					constraint = new GRBLinExpr();
+		  			constraint.addTerm( 1,studentCourseSemester[i][courseNum][k]);	 // dependent course for student semester k
+		  			
+		  				for (int k2=k;k2<=TOTAL_SEMESTERS;k2++){
+		  					constraint.addTerm( 1,studentCourseSemester[i][preReqCourseNum][k2]);    //prereq course semester K2....K2max semester
+		  				}
+		  				model.addConstr(constraint,GRB.LESS_EQUAL,1,constraintName);
+		  			}	  			
+		  		}	  		
+		  	}  
+            
+          	
+         
+          	       
   //**********************************************************************************
-            
+           
             // Display our results
           
             double objectiveValue = model.get(GRB.DoubleAttr.ObjVal);            
             System.out.printf( "Ojective value = %f\n", objectiveValue );
+        /*    
 			for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each row in matrix
 				for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course 
 					for (int k=1;k<=TOTAL_SEMESTERS;k++){  //loop through each semester
@@ -241,7 +302,7 @@ public class Project1Scheduler implements Scheduler {
 					}
 				}
 			}
-            
+       */     
 			
 		
 		} catch (GRBException e) {
@@ -269,6 +330,15 @@ public class Project1Scheduler implements Scheduler {
 	}
 
 
-	
+	private boolean isCourseAvailableInSemester(int semesterNumber, int courseNumber){
+		for (int i=1;i<=courseAvailability[semesterNumber].length-1;i++)
+		{
+		if(courseAvailability[semesterNumber][i]==courseNumber)
+			return true;
+		
+		}
+		
+		return false;
+	}
 	
 }

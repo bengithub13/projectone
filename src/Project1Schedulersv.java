@@ -12,6 +12,10 @@ public class Project1Schedulersv implements Scheduler {
     private static final int MAX_CLASS_SIZE = 2;	// Note: Play with this and see 
     												// what happens to the results
 
+ 
+    
+    
+    
 	public void calculateSchedule(String dataFolder){
 		// TODO Read the test data from the provided folder
 
