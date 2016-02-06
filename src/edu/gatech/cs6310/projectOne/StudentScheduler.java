@@ -2,7 +2,7 @@ package edu.gatech.cs6310.projectOne;
 import java.util.List;
 import java.util.Vector;
 
-import edu.gatech.cs6310.projectOne.FileReader.StudentDemandFileReader;
+import edu.gatech.cs6310.projectOne.FileParser.StudentDemandFileReader;
 import gurobi.GRB;
 import gurobi.GRBEnv;
 import gurobi.GRBException;
@@ -33,7 +33,8 @@ public class StudentScheduler implements Scheduler {
     	{0,2,3,4,6,8,9,12,13},					//summer semester 12
     };					
     private final Integer[][] coursePrerequisite=new Integer[][]{
-    	{4,16},{4,16},{12,1},{9,13},{3,7}       // {rerequisite, course dependant on rerequsite}
+    	//{4,16},
+    	{4,16},{12,1},{9,13},{3,7}       // {rerequisite, course dependant on rerequsite}
     };
     
     private void setStudentDemandFileReader(StudentDemandFileReader studentDemandFileReader){
@@ -51,7 +52,7 @@ public class StudentScheduler implements Scheduler {
 			env.set(GRB.IntParam.OutputFlag,0);
 			GRBModel model = new GRBModel(env);
 			setStudentDemandFileReader(new StudentDemandFileReader(dataFolder));
-			studentDemandMatrix=studentDemandFileReader.getStudentDemandRows();
+			studentDemandMatrix=studentDemandFileReader.parseFiles();
 		//Create the variables -- add a variable for each "POSSIBLE" combination of Yijk
 		//i want to start the array indexes at 1 to keep sanity.	
 		studentCourseSemester=new GRBVar[(studentDemandFileReader.getNumOfStudents())+1][Max_NUM_COURSES_OFFERED+1][TOTAL_SEMESTERS+1];
@@ -89,7 +90,7 @@ public class StudentScheduler implements Scheduler {
   
 
             GRBLinExpr expr = new GRBLinExpr();
-            System.out.print( " Set Objective : minimize " );
+    //        System.out.print( " Set Objective : minimize " );
             expr.addTerm(1.0,x);
   
           

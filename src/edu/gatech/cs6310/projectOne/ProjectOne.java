@@ -8,7 +8,7 @@ public class ProjectOne {
 		// scheduler.calculateSchedule("C:/Users/BenPoon/workspace2/ProjectOne/resources/resources/medium/student_demand_600.csv");
 
 		 //System.out.println("file is "+ args[1]);
-		// scheduler.calculateSchedule(args[1]);
+		 scheduler.calculateSchedule(args[1]);
 		 
 		 
 		

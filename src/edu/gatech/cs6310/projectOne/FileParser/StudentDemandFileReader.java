@@ -1,4 +1,5 @@
- 	package edu.gatech.cs6310.projectOne.FileReader;
+package edu.gatech.cs6310.projectOne.FileParser;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,51 +10,44 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class StudentDemandFileReader {
+import edu.gatech.cs6310.projectOne.entity.StudentDemand;
+
+public class StudentDemandFileReader implements FileParser{
 
 	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
 	private HashMap<Integer, Set<Integer>> coursesTotalDemandHashMap;
+	private List<StudentDemand> studentDemands = new ArrayList<StudentDemand>();	
 	
+
 	private String csvFileName;
-	private int numberOfStudent=0;
+	private int numberOfStudent = 0;
 
 	public StudentDemandFileReader(String csvFileName) {
 		super();
 		this.csvFileName = csvFileName;
-		coursesPerStudentHashMap=new HashMap<Integer,Set<Integer>>();
-		coursesTotalDemandHashMap=new HashMap<Integer,Set<Integer>>();
+		coursesPerStudentHashMap = new HashMap<Integer, Set<Integer>>();
+		coursesTotalDemandHashMap = new HashMap<Integer, Set<Integer>>();
 	}
 
 	/*
 	 * read csv file where each rows has 3 columns returns represeting a line in
 	 * the student demand csv file
 	 */
-	public List<String[]> getStudentDemandRows() {
+	public List<String[]> parseFiles() {
 
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
-		int row = 0;
-		List<String[]> studentDemandRows = new ArrayList<String[]>();
-		int column = 0;
+		List<String[]> studentDemandRows = new ArrayList<String[]>();	
 		try {
 
 			br = new BufferedReader(new FileReader(csvFileName));
-			line = br.readLine(); // skip first line
+			line = br.readLine(); // skip first line- header
 			while ((line = br.readLine()) != null) {
-
-				// read each row
-
-				String[] studentRow = line.split(cvsSplitBy);
+				String[] studentRow = line.split(cvsSplitBy); // each row
 				studentDemandRows.add(studentRow);
 				addToStudentHashMap(studentRow);
-				addToCourseDemandHashMap(studentRow); 
-
-				// System.out.println("Student row: [student id= " +
-				// studentRow[0]
-				// + " courseid= " + studentRow[1] + " semesterid=
-				// "+studentRow[2]);
-				// return studentRow;
+				addToCourseDemandHashMap(studentRow);
 			}
 
 		} catch (FileNotFoundException e) {
@@ -70,17 +64,17 @@ public class StudentDemandFileReader {
 			}
 		}
 
-	//	System.out.println("Done");
 		return studentDemandRows;
 	}
 
-	/* 
-	 * addToStudentHashMap-- add course to hashMap where key=student number and value=Set{courses for the studen}
-	 * input=studentRow = array[student #, course#, semester#)
+	/*
+	 * addToStudentHashMap-- add course to hashMap where key=student number and
+	 * value=Set{courses for the studen} input=studentRow = array[student #,
+	 * course#, semester#)
 	 */
 	private void addToStudentHashMap(String[] studentRow) {
 		// TODO Auto-generated method stub
-		
+
 		int studentNumber = Integer.parseInt(studentRow[0]);
 		int courseNumber = Integer.parseInt(studentRow[1]);
 		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
@@ -95,10 +89,8 @@ public class StudentDemandFileReader {
 		coursesPerStudentHashMap.put(studentNumber, coursesSet);
 
 	}
-	
+
 	private void addToCourseDemandHashMap(String[] studentRow) {
-		// TODO Auto-generated method stub
-		
 		int studentNumber = Integer.parseInt(studentRow[0]);
 		int courseNumber = Integer.parseInt(studentRow[1]);
 		Set<Integer> studentSet = coursesTotalDemandHashMap.get(courseNumber);
@@ -112,37 +104,39 @@ public class StudentDemandFileReader {
 		coursesTotalDemandHashMap.put(courseNumber, studentSet);
 
 	}
-	
-	public Integer[] getCoursesForStudent(int studentNumber){
+
+	public Integer[] getCoursesForStudent(int studentNumber) {
 		HashSet<Integer> coursesSet = (HashSet<Integer>) coursesPerStudentHashMap.get(studentNumber);
-		if (coursesSet==null)
-		return null;
+		if (coursesSet == null)
+			return null;
 		else
-			return  coursesSet.toArray(new Integer[coursesSet.size()]);
+			return coursesSet.toArray(new Integer[coursesSet.size()]);
 	}
-	
-	
-	public boolean isCourseDemandByStudent(int studentNumber, int courseNumber){
+
+	public boolean isCourseDemandByStudent(int studentNumber, int courseNumber) {
 		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
 		if (coursesSet == null) {
-		return false;
-		}
-		else if  (coursesSet.contains(courseNumber)){
+			return false;
+		} else if (coursesSet.contains(courseNumber)) {
 			return true;
 		}
 		return false;
 	}
-	
-	private void addNumOfStudents(){
+
+	private void addNumOfStudents() {
 		numberOfStudent++;
 	}
-	
-	
-	
-	public int getNumOfStudents(){
-		
+
+	public int getNumOfStudents() {
+
 		return numberOfStudent;
+
+	}
+
+	@Override
+	public void parseFile() {
+		// TODO Auto-generated method stub
 		
 	};
-	
+
 }
