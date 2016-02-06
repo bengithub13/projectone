@@ -47,6 +47,7 @@ public class StudentScheduler implements Scheduler {
         GRBEnv env;
 		try {
 			env = new GRBEnv("mip1.log");
+			env.set(GRB.IntParam.OutputFlag,0);
 			GRBModel model = new GRBModel(env);
 			setStudentDemandFileReader(new StudentDemandFileReader(dataFolder));
 			studentDemandMatrix=studentDemandFileReader.getStudentDemandRows();
@@ -87,7 +88,7 @@ public class StudentScheduler implements Scheduler {
   
 
             GRBLinExpr expr = new GRBLinExpr();
-            System.out.print( " Set Objective : minimize " );
+      //      System.out.print( " Set Objective : minimize " );
             expr.addTerm(1.0,x);
   
           
@@ -250,7 +251,7 @@ public class StudentScheduler implements Scheduler {
 				  	
   
 	  
-	  
+				  	
             model.optimize();
 //*******************************************************************************************
 //  a student can not take a course before prerequisite  - a course cano not be taken semester 1 if prereq is required

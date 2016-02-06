@@ -70,7 +70,7 @@ public class StudentDemandFileReader {
 			}
 		}
 
-		System.out.println("Done");
+		
 		return studentDemandRows;
 	}
 

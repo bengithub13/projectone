@@ -7,7 +7,7 @@ public class ProjectOne {
 		 scheduler.calculateSchedule("C:/Users/BenPoon/Desktop/project1/student_demand_600.csv");
 		 
 		 
-		 System.out.printf("X= %f\n",scheduler.getObjectiveValue());
+		 System.out.printf("X=%.2f\n",scheduler.getObjectiveValue());
 		 
 		//StudentDemand studentDemand=new StudentDemand();
 	   // studentDemand.SetStudentDemandRow();
