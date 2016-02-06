@@ -93,15 +93,11 @@ public class StudentScheduler implements Scheduler {
           
             
 	  model.setObjective(expr, GRB.MINIMIZE);
-			 // model.setObjective(expr, GRB.MAXIMIZE);
-   // add //constraints
+	
 			  
-	//    why is this constraint taking so long!
+
   //***************constraint student cant take more than 2 courses per semester *******************************************************************			  
-	//		  System.out.println();
-	//		  System.out.print( " Set constraint1 : " );
-// each student add constraint per semester- student cant take more then 2 course per semester 	
-			//  for (int i=1;i<=studentDemandFileReader.getNumOfStudents();i++){  //loop through each student  
+	
 			  for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student  
 			 
 			  for (int k=1;k<=TOTAL_SEMESTERS;k++){ //loop through each semester 
@@ -111,11 +107,9 @@ public class StudentScheduler implements Scheduler {
 													
 							if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
 							constraint.addTerm( 1,studentCourseSemester[i][j][k]);
-					//		System.out.print( " - name= "+ "1Y"+i+j+k);
 							}
 							else{
 								constraint.addTerm( 0,studentCourseSemester[i][j][k]);
-						//		System.out.print( " - name= "+ "0Y"+i+j+k);
 			
 							}
 						}
@@ -128,77 +122,31 @@ public class StudentScheduler implements Scheduler {
 				
 				
 
-/*			commnet out- dont think we need this anymore due to constraint to ensure all courses requested by student=1  
- //****************constraint - student cant take course more than once  ******************************************************************			  
-			  System.out.println();
-			  System.out.print( " Set constraint2 : " );
-	// student cant take course more than once in all semesters combined		
-			  for (int i=1;i<=studentDemandFileReader.getNumOfStudents();i++){  //loop through each student
-				  for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course
-					  GRBLinExpr constraint = new GRBLinExpr();
-				  for (int k=1;k<=TOTAL_SEMESTERS;k++){ //loop through each semester 
-					
-													
-							if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
-							constraint.addTerm( 1,studentCourseSemester[i][j][k]);
-							System.out.print( " - name= "+ "1Y"+i+j+k);
-							
-							}
-							else{
-								constraint.addTerm( 0,studentCourseSemester[i][j][k]);
-								System.out.print( " - name= "+ "0Y"+i+j+k);
-			
-							}
-						}
-					//add the constraint for every student per course 
-				  String constraintName="constraint2"+i+j;
-					model.addConstr(constraint,GRB.LESS_EQUAL,1.0,constraintName);
-				 // model.addConstr(constraint,GRB.EQUAL,1.0,constraintName);
-				}
-				
-				}
-		  
-*/
-	  
+ 
  //*********************CONSTRAINT each class has to be <=x *************************************************************			  
 			
 // constraint number of students per course in a semester to less than equal to X 
 				  for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course
 					  
 				  for (int k=1;k<=TOTAL_SEMESTERS;k++){ //loop through each semester 
-					  GRBLinExpr constraint = new GRBLinExpr();
-					 // System.out.println();				
+					  GRBLinExpr constraint = new GRBLinExpr();				 			
 					  String constraintName="constraint3 "+"course#"+j+"semester#"+k;
-					//  System.out.println( " Set constraint for course#:"+constraintName);
 					  boolean anyDemandFlag=false;
 					  for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student			
 						 		
 							if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
 							constraint.addTerm( 1,studentCourseSemester[i][j][k]);
-						//	System.out.print( " student= "+ "1Y"+i+j+k);
 							anyDemandFlag=true;
 							}
 							else{
 								constraint.addTerm( 0,studentCourseSemester[i][j][k]);
-								//System.out.print( " student= "+ "0Y"+i+j+k);
 			
 							}
 						}
 					 
 					  
 					  if (anyDemandFlag)
-							model.addConstr(constraint,GRB.LESS_EQUAL,x,constraintName);
-	/*				  
-					//add the constraint  per course/semester combination
-					  if (anyDemandFlag){
-					model.addConstr(constraint,GRB.LESS_EQUAL,x,constraintName);
-					 System.out.println( " added constraint name:"+constraintName);
-					  }
-					  else{
-						  System.out.println( " ignored constraint name:"+constraintName);
-					  }
-		*/
-					  
+							model.addConstr(constraint,GRB.LESS_EQUAL,x,constraintName);	  
 					  
 				  }
 				
@@ -226,10 +174,7 @@ public class StudentScheduler implements Scheduler {
 				  		
 				  	}   
 
-				//  /*fake constraint
-	  //GRBLinExpr constraint = new GRBLinExpr();
-	  //constraint.addConstant(5.0);		  
-	 // model.addConstr(constraint,GRB.LESS_EQUAL,x,"testing");
+
 //*******************************************************************************************
 //***** constraint- course availabity certain course only available certain semesters********				  	
 //all classes that are not available in a semester should add to 0					 
@@ -247,11 +192,9 @@ public class StudentScheduler implements Scheduler {
 				  		}
 				  		
 				  	}   
-				  	
-  
+
 	  
-	  
-            model.optimize();
+        //    model.optimize();
 //*******************************************************************************************
 //  a student can not take a course before prerequisite  - a course cano not be taken semester 1 if prereq is required
             int courseNum=0;
@@ -298,11 +241,7 @@ public class StudentScheduler implements Scheduler {
           	
          
           	       
-  //**********************************************************************************
-           
-            // Display our results
-          
-            //objectiveValue = model.get(GRB.DoubleAttr.ObjVal);            
+          	model.optimize();           
             setObjectiveValue(model.get(GRB.DoubleAttr.ObjVal));
          //   System.out.printf( "Ojective value = %f\n", objectiveValue );
         /*    

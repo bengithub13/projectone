@@ -1,4 +1,4 @@
-package edu.gatech.cs6310.projectOne;
+ 	package edu.gatech.cs6310.projectOne.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
