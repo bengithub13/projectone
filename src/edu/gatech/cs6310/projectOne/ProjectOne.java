@@ -7,12 +7,12 @@ public class ProjectOne {
 		// scheduler.calculateSchedule("C:/Users/BenPoon/Desktop/project1/student_demand_10.csv");
 		// scheduler.calculateSchedule("C:/Users/BenPoon/workspace2/ProjectOne/resources/resources/medium/student_demand_600.csv");
 
-		 System.out.println("file is "+ args[1]);
-		 scheduler.calculateSchedule(args[1]);
+		 //System.out.println("file is "+ args[1]);
+		// scheduler.calculateSchedule(args[1]);
 		 
 		 
-		 System.out.printf("X= %f\n",scheduler.getObjectiveValue());
-		 
+		
+		 System.out.printf("X=%.2f\n",scheduler.getObjectiveValue());
 	}
 
 }

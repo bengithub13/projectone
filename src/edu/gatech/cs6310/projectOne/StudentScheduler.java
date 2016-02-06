@@ -2,6 +2,7 @@ package edu.gatech.cs6310.projectOne;
 import java.util.List;
 import java.util.Vector;
 
+import edu.gatech.cs6310.projectOne.FileReader.StudentDemandFileReader;
 import gurobi.GRB;
 import gurobi.GRBEnv;
 import gurobi.GRBException;
@@ -47,6 +48,7 @@ public class StudentScheduler implements Scheduler {
         GRBEnv env;
 		try {
 			env = new GRBEnv("mip1.log");
+			env.set(GRB.IntParam.OutputFlag,0);
 			GRBModel model = new GRBModel(env);
 			setStudentDemandFileReader(new StudentDemandFileReader(dataFolder));
 			studentDemandMatrix=studentDemandFileReader.getStudentDemandRows();
