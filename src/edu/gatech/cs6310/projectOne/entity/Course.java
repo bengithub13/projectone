@@ -7,7 +7,7 @@ public class Course {
 	private int fallTerm;
 	private int springTerm;
 	private int summerTerm;
-	private String availabiliy;
+	private String availability;
 
 	public Course() {
 		super();
@@ -63,11 +63,11 @@ public class Course {
 	}
 
 	public String getAvailabiliy() {
-		return availabiliy;
+		return availability;
 	}
 
-	public void setAvailabiliy(String availabiliy) {
-		this.availabiliy = availabiliy;
+	public void setAvailabiliy(String availability) {
+		this.availability = availability;
 	}
 
 	public boolean isCourseAvailableInSemester(int semesterNumber) {

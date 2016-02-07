@@ -1,8 +1,15 @@
 package edu.gatech.cs6310.projectOne;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
+import edu.gatech.cs6310.projectOne.FileParser.CourseReader;
 import edu.gatech.cs6310.projectOne.FileParser.StudentDemandFileReader;
+import edu.gatech.cs6310.projectOne.entity.Course;
+import edu.gatech.cs6310.projectOne.entity.CourseDependency;
+import edu.gatech.cs6310.projectOne.entity.StudentDemand;
 import gurobi.GRB;
 import gurobi.GRBEnv;
 import gurobi.GRBException;
@@ -13,66 +20,63 @@ import gurobi.GRBVar;
 public class StudentScheduler implements Scheduler {
 	private double objectiveValue;
 	private StudentDemandFileReader studentDemandFileReader;
+	private CourseReader courseReader;
+	private List<StudentDemand> studentDemands;
+	private List<Course> courses;
+	private List<CourseDependency> courseDependencies;
+	private int numOfStudents;
+	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
     private static final int Max_NUM_COURSES_OFFERED=18;
     private static final int TOTAL_SEMESTERS=12;
-    private GRBVar[][][] studentCourseSemester;		               // what happens to the results
-    private List<String[]> studentDemandMatrix;
-    private final Integer[][] courseAvailability=new Integer[][]{
-    	{},										//place holder to start index off as 1
-    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall semester 1
-    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
-    	{0,2,3,4,6,8,9,12,13},					//summer
-    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall
-    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
-    	{0,2,3,4,6,8,9,12,13},					//summer
-    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall
-    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
-    	{0,2,3,4,6,8,9,12,13},					//summer
-    	{0,2,3,4,6,8,9,12,13,1,7,11,15,17},		//fall
-    	{0,2,3,4,6,8,9,12,13,5,10,14,16,18},    	//spring
-    	{0,2,3,4,6,8,9,12,13},					//summer semester 12
-    };					
+    private GRBVar[][][] studentCourseSemester;		               
+   
+	/*			
     private final Integer[][] coursePrerequisite=new Integer[][]{
-    	//{4,16},
+
     	{4,16},{12,1},{9,13},{3,7}       // {rerequisite, course dependant on rerequsite}
     };
-    
-    private void setStudentDemandFileReader(StudentDemandFileReader studentDemandFileReader){
-    	this.studentDemandFileReader=studentDemandFileReader;
+    */
+    private void setStudentDemands(List <StudentDemand> studentDemands){
+    	this.studentDemands=studentDemands;
     }
-	public void calculateSchedule(String dataFolder){ 
+  
+    private void setCourses(List <Course> courses){
+    	this.courses=courses;
+   
+    }
+    
 
-
-		
-		
-		
+		public void calculateSchedule(List<StudentDemand> studentDemand, List<Course> courses, List<CourseDependency> courseDependencies){
         GRBEnv env;
+        setStudentDemands(studentDemand);
+        setCourses(courses);
+        
 		try {
 			env = new GRBEnv("mip1.log");
 			env.set(GRB.IntParam.OutputFlag,0);
 			GRBModel model = new GRBModel(env);
-			setStudentDemandFileReader(new StudentDemandFileReader(dataFolder));
-			studentDemandMatrix=studentDemandFileReader.parseFiles();
-		//Create the variables -- add a variable for each "POSSIBLE" combination of Yijk
-		//i want to start the array indexes at 1 to keep sanity.	
-		studentCourseSemester=new GRBVar[(studentDemandFileReader.getNumOfStudents())+1][Max_NUM_COURSES_OFFERED+1][TOTAL_SEMESTERS+1];
+		
 			
-			 
+			Set studentSet=new HashSet();
+			coursesPerStudentHashMap=new HashMap();
+			countStudentDemand();
+		
+	
+			studentCourseSemester=new GRBVar[numOfStudents+1][Max_NUM_COURSES_OFFERED+1][TOTAL_SEMESTERS+1];		 
 			
-			for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each row in matrix
+		
+			for (int i=1;i<=numOfStudents;i++){
 				for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course 
 					for (int k=1;k<=TOTAL_SEMESTERS;k++){  //loop through each semester
 						String varName="studentCourseSemester"+i+j+k;
 						
-						if (studentDemandFileReader.isCourseDemandByStudent(i, j)){
-				//		if ((studentDemandFileReader.isCourseDemandByStudent(i, j)) && (isCourseAvailableInSemester(k, j))){
-									studentCourseSemester[i][j][k]=model.addVar(0.0, 1.0, 0.0, GRB.BINARY,varName);
-						//			System.out.println( "setting GRBVAR- max value = 1 - name= "+varName  );
+						
+						if (isCourseDemandByStudent(i, j)){
+									studentCourseSemester[i][j][k]=model.addVar(0.0, 1.0, 0.0, GRB.BINARY,varName);		
 						}			
 						
 						else{
 							studentCourseSemester[i][j][k]=model.addVar(0.0, 0.0, 0.0, GRB.BINARY,varName);
-							//		System.out.println( "setting GRBVAR- max value=0 - name= "+varName  );
 							}
 					}
 				}
@@ -108,7 +112,8 @@ public class StudentScheduler implements Scheduler {
 	
 					for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course 
 													
-							if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
+						//	if (studentDemandFileReader.isCourseDemandByStudent(i, j)){		
+							if (isCourseDemandByStudent(i,j)){
 							constraint.addTerm( 1,studentCourseSemester[i][j][k]);
 							}
 							else{
@@ -137,7 +142,8 @@ public class StudentScheduler implements Scheduler {
 					  boolean anyDemandFlag=false;
 					  for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student			
 						 		
-							if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
+						//	if (studentDemandFileReader.isCourseDemandByStudent(i, j)){			
+						  	if (isCourseDemandByStudent(i,j)){
 							constraint.addTerm( 1,studentCourseSemester[i][j][k]);
 							anyDemandFlag=true;
 							}
@@ -161,8 +167,10 @@ public class StudentScheduler implements Scheduler {
 
 //*********************CONSTRAINT make sure each student takes all their requested courses  *************************************************************			  
 
-	 
-				  	for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student	
+		/*		  
+	//
+	//			  for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each student	
+				  for (int i=1; i<=studentDemandFileReader.getNumOfStudents();i++){
 	 					// add constraint for each course number for student
 				  		Integer[] courseList=studentDemandFileReader.getCoursesForStudent(i);
 				  		for (int j=0;j<=(courseList.length)-1;j++){
@@ -176,7 +184,24 @@ public class StudentScheduler implements Scheduler {
 				  		}
 				  		
 				  	}   
+*/
 
+				  for (StudentDemand stdemand: studentDemands){  //loop through each student	
+				  
+	 					// add constraint for each course number for student
+			//	  		Integer[] courseList=studentDemandFileReader.getCoursesForStudent(i);
+				//  		for (int j=0;j<=(courseList.length)-1;j++){
+				  			GRBLinExpr constraint = new GRBLinExpr();
+				  			 String constraintName="constraint4 "+"student#"+stdemand.getStudentId()+"course#"+stdemand.getCourseId();
+				  			 
+				  			for (int k=1;k<=TOTAL_SEMESTERS;k++){
+				  				constraint.addTerm( 1,studentCourseSemester[stdemand.getStudentId()][stdemand.getCourseId()][k]);
+				  			}
+				  			model.addConstr(constraint,GRB.EQUAL,1,constraintName);
+				  		}
+				  		
+				  	   
+ 
 
 //*******************************************************************************************
 //***** constraint- course availabity certain course only available certain semesters********				  	
@@ -204,9 +229,11 @@ public class StudentScheduler implements Scheduler {
             String constraintName=null;
             GRBLinExpr constraint = new GRBLinExpr();
           	for (int i=1;i<=studentCourseSemester.length-1;i++){   
-		  	for (int j=0;j<=coursePrerequisite.length-1;j++){  
-		  		 courseNum=coursePrerequisite[j][1];
-	  			 	constraintName="constraint_prereq1-  "+"student#"+i+"course#"+courseNum;
+		//  	for (int j=0;j<=coursePrerequisite.length-1;j++){  
+		 // 		 courseNum=coursePrerequisite[j][1];
+	  		for (CourseDependency courseDependency: courseDependencies){
+	  			courseNum=courseDependency.getDependentCourseId();
+          		constraintName="constraint_prereq1-  "+"student#"+i+"course#"+courseNum;
 		  		
 		  			for (int k=1;k<=TOTAL_SEMESTERS;k++){
 		  							  				
@@ -224,10 +251,15 @@ public class StudentScheduler implements Scheduler {
           
             
           	for (int i=1;i<=studentCourseSemester.length-1;i++){   
-		  	for (int j=0;j<=coursePrerequisite.length-1;j++){  //prerequisite/course matrix 
-		  			Integer preReqCourseNum=coursePrerequisite[j][0];
-		  			courseNum=coursePrerequisite[j][1];
-	  			 	constraintName="constraint_prereq2-  "+"student#"+i+"course#"+courseNum;
+		 // 	for (int j=0;j<=coursePrerequisite.length-1;j++){  //prerequisite/course matrix 
+		 // 			Integer preReqCourseNum=coursePrerequisite[j][0];
+		 // 			courseNum=coursePrerequisite[j][1];
+          		for (CourseDependency courseDependency: courseDependencies){
+    	  			courseNum=courseDependency.getDependentCourseId();
+    	  			Integer preReqCourseNum=courseDependency.getPrerequisiteId();
+          		
+          		
+          		constraintName="constraint_prereq2-  "+"student#"+i+"course#"+courseNum;
 	  			 	
 		  			for (int k=2;k<=TOTAL_SEMESTERS;k++){
 		  					constraint = new GRBLinExpr();
@@ -246,17 +278,7 @@ public class StudentScheduler implements Scheduler {
           	       
           	model.optimize();           
             setObjectiveValue(model.get(GRB.DoubleAttr.ObjVal));
-         //   System.out.printf( "Ojective value = %f\n", objectiveValue );
-        /*    
-			for (int i=1;i<=studentCourseSemester.length-1;i++){  //loop through each row in matrix
-				for (int j=1;j<=Max_NUM_COURSES_OFFERED;j++){  //loop through each course 
-					for (int k=1;k<=TOTAL_SEMESTERS;k++){  //loop through each semester
-					if (studentCourseSemester[i][j][k].get(GRB.DoubleAttr.X)==1)
-				System.out.println( "student"+i+ " is taking course"+j+"in semester "+k);
-					}
-				}
-			}
-       */     
+       
 			
 		
 		} catch (GRBException e) {
@@ -285,16 +307,52 @@ public class StudentScheduler implements Scheduler {
 		return null;
 	}
 
+	
+	private void countStudentDemand(){
+		for (StudentDemand studentDemand:studentDemands){
+		addToStudentHashMap(studentDemand);
+	}}
 
-	private boolean isCourseAvailableInSemester(int semesterNumber, int courseNumber){
-		for (int i=1;i<=courseAvailability[semesterNumber].length-1;i++)
-		{
-		if(courseAvailability[semesterNumber][i]==courseNumber)
-			return true;
-		
+	private boolean isCourseAvailableInSemester(int semesterNumber, int courseId){
+		for (Course course:courses){
+			if (courseId==course.getCourseId()){
+				if (course.isCourseAvailableInSemester(semesterNumber)){
+				return true;
+				}
+			}
 		}
 		
 		return false;
 	}
 	
+	public boolean isCourseDemandByStudent(int studentNumber, int courseNumber) {
+		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
+		if (coursesSet == null) {
+			return false;
+		} else if (coursesSet.contains(courseNumber)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void addNumOfStudents() {
+		numOfStudents++;
+	}
+	private void addToStudentHashMap(StudentDemand studentDemand) {
+		// TODO Auto-generated method stub
+
+		int studentNumber = studentDemand.getStudentId();
+		int courseNumber = studentDemand.getCourseId();
+		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
+		if (coursesSet == null) {
+			addNumOfStudents();
+			coursesSet = new HashSet<Integer>();
+			coursesSet.add(courseNumber);
+		} else {
+			coursesSet.add(courseNumber);
+		}
+
+		coursesPerStudentHashMap.put(studentNumber, coursesSet);
+
+	}
 }

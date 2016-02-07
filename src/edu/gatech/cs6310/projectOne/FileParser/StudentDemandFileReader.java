@@ -33,19 +33,26 @@ public class StudentDemandFileReader implements FileParser{
 	 * read csv file where each rows has 3 columns returns represeting a line in
 	 * the student demand csv file
 	 */
-	public List<String[]> parseFiles() {
-
+//	public List<String[]> parseFiles() {
+	public void parseFile(){
+	StudentDemand studentDemand=null;
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
-		List<String[]> studentDemandRows = new ArrayList<String[]>();	
+//		List<String[]> studentDemandRows = new ArrayList<String[]>();	
 		try {
 
 			br = new BufferedReader(new FileReader(csvFileName));
 			line = br.readLine(); // skip first line- header
 			while ((line = br.readLine()) != null) {
 				String[] studentRow = line.split(cvsSplitBy); // each row
-				studentDemandRows.add(studentRow);
+			//	studentDemandRows.add(studentRow);
+				studentDemand= new StudentDemand();
+				studentDemand.setStudentId(Integer.parseInt(studentRow[0])); 
+				studentDemand.setCourseId(Integer.parseInt(studentRow[1]));
+				studentDemand.setSemesterId(Integer.parseInt(studentRow[2]));
+				studentDemands.add(studentDemand);
+				
 				addToStudentHashMap(studentRow);
 				addToCourseDemandHashMap(studentRow);
 			}
@@ -64,7 +71,8 @@ public class StudentDemandFileReader implements FileParser{
 			}
 		}
 
-		return studentDemandRows;
+		//return studentDemandRows;
+		
 	}
 
 	/*
@@ -130,13 +138,12 @@ public class StudentDemandFileReader implements FileParser{
 	public int getNumOfStudents() {
 
 		return numberOfStudent;
+		
 
 	}
 
-	@Override
-	public void parseFile() {
-		// TODO Auto-generated method stub
-		
-	};
+public List<StudentDemand> getStudentDemand(){
+	return this.studentDemands;
+}
 
 }
