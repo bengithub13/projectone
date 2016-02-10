@@ -12,7 +12,7 @@ import java.util.Set;
 
 import edu.gatech.cs6310.projectOne.entity.StudentDemand;
 
-public class StudentDemandFileReader2 implements FileParser{
+public class StudentDemandFileReader2 implements AbstractFileReader{
 
 	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
 	private HashMap<Integer, Set<Integer>> coursesTotalDemandHashMap;

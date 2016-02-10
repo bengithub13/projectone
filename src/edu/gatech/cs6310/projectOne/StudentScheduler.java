@@ -1,3 +1,4 @@
+
 package edu.gatech.cs6310.projectOne;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class StudentScheduler implements Scheduler {
 	private List<Course> courses;
 	private List<CourseDependency> courseDependencies;
 	private int numOfStudents;
+	private Integer[][][] studentDemandMatrix;
 
 	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
 	private static final int Max_NUM_COURSES_OFFERED = 18;
@@ -83,7 +85,12 @@ public class StudentScheduler implements Scheduler {
 			model = new GRBModel(env);
 			studentCourseSemester = new GRBVar[numOfStudents + 1][Max_NUM_COURSES_OFFERED + 1][TOTAL_SEMESTERS + 1];
 
+			// studentCourseSemester = new GRBVar[studentDemands.size() +
+			// 1][Max_NUM_COURSES_OFFERED + 1][TOTAL_SEMESTERS + 1];
+
 			for (int i = 1; i <= numOfStudents; i++) {
+				// for (int i = 1; i <= studentDemands.size(); i++) {
+
 				for (int j = 1; j <= Max_NUM_COURSES_OFFERED; j++) {
 					for (int k = 1; k <= TOTAL_SEMESTERS; k++) {
 						String varName = "studentCourseSemester" + i + j + k;
@@ -115,7 +122,7 @@ public class StudentScheduler implements Scheduler {
 
 	}
 
-	public void setObjectiveValue(double objectiveValue) {
+	private void setObjectiveValue(double objectiveValue) {
 		this.objectiveValue = objectiveValue;
 	}
 
@@ -265,11 +272,24 @@ public class StudentScheduler implements Scheduler {
 		}
 	}
 
+	/*
+	 * AddPrerequisite constraint. For any dependent course " ex : course 3
+	 * dependant course in semester 2 + course 6 prereq course in semester
+	 * 3,4,5,6,7,8,9,10,11,12 can not be >1. course 3 dependant course in
+	 * semester 3 + course 6 prereq course in semester 4,5,6,7,8,9,10,11,12 can
+	 * not be >1.
+	 * 
+	 */
 	private void AddPrerequisiteConstraint() {
 		GRBLinExpr constraint = null;
 		try {
-			for (int i = 1; i <= studentCourseSemester.length - 1; i++) {
-				for (CourseDependency courseDependency : courseDependencies) {
+			for (int i = 1; i <= studentCourseSemester.length - 1; i++) { // for
+																			// each
+																			// student
+				for (CourseDependency courseDependency : courseDependencies) { // for
+																				// each
+																				// prereq/course
+																				// combos
 					int courseNum = courseDependency.getDependentCourseId();
 					Integer preReqCourseNum = courseDependency.getPrerequisiteId();
 
@@ -281,15 +301,20 @@ public class StudentScheduler implements Scheduler {
 																						// course
 																						// for
 																						// student
+																						// for
 																						// semester
 																						// k
 
 						for (int k2 = k; k2 <= TOTAL_SEMESTERS; k2++) {
 							constraint.addTerm(1, studentCourseSemester[i][preReqCourseNum][k2]); // prereq
 																									// course
-																									// semester
-																									// K2....K2max
-																									// semester
+																									// for
+																									// semestet
+																									// sum
+																									// of
+																									// all
+																									// k2
+
 						}
 						model.addConstr(constraint, GRB.LESS_EQUAL, 1, constraintName);
 					}
@@ -300,7 +325,7 @@ public class StudentScheduler implements Scheduler {
 		}
 	}
 
-	public boolean isCourseDemandByStudent(int studentNumber, int courseNumber) {
+	private boolean isCourseDemandByStudent(int studentNumber, int courseNumber) {
 		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
 		if (coursesSet == null) {
 			return false;
@@ -331,4 +356,32 @@ public class StudentScheduler implements Scheduler {
 		coursesPerStudentHashMap.put(studentNumber, coursesSet);
 
 	}
+
+	public void printSchedule() {
+		try {
+			for (int i = 1; i <= studentCourseSemester.length - 1; i++) { // loop
+																			// through
+																			// each
+																			// row
+																			// in
+																			// matrix
+				for (int j = 1; j <= Max_NUM_COURSES_OFFERED; j++) { // loop
+																		// through
+																		// each
+																		// course
+					for (int k = 1; k <= TOTAL_SEMESTERS; k++) { // loop through
+																	// each
+																	// semester
+						if (studentCourseSemester[i][j][k].get(GRB.DoubleAttr.X) == 1)
+							System.out.println("student" + i + " is taking course" + j + "in semester " + k);
+					}
+				}
+			}
+		}
+
+		catch (GRBException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

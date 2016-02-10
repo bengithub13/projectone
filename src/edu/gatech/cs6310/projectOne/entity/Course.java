@@ -66,7 +66,7 @@ public class Course {
 		return availability;
 	}
 
-	public void setAvailabiliy(String availability) {
+	public void setAvailabiliy(String availabiy) {
 		this.availability = availability;
 	}
 

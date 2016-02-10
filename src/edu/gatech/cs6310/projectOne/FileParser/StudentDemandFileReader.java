@@ -12,21 +12,21 @@ import java.util.Set;
 
 import edu.gatech.cs6310.projectOne.entity.StudentDemand;
 
-public class StudentDemandFileReader implements FileParser{
+public class StudentDemandFileReader implements AbstractFileReader{
 
-	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
-	private HashMap<Integer, Set<Integer>> coursesTotalDemandHashMap;
+//	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
+//	private HashMap<Integer, Set<Integer>> coursesTotalDemandHashMap;
 	private List<StudentDemand> studentDemands = new ArrayList<StudentDemand>();	
 	
 
 	private String csvFileName;
-	private int numberOfStudent = 0;
+//	private int numberOfStudent = 0;
 
 	public StudentDemandFileReader(String csvFileName) {
 		super();
 		this.csvFileName = csvFileName;
-		coursesPerStudentHashMap = new HashMap<Integer, Set<Integer>>();
-		coursesTotalDemandHashMap = new HashMap<Integer, Set<Integer>>();
+//		coursesPerStudentHashMap = new HashMap<Integer, Set<Integer>>();
+//		coursesTotalDemandHashMap = new HashMap<Integer, Set<Integer>>();
 	}
 
 	/*
@@ -53,8 +53,8 @@ public class StudentDemandFileReader implements FileParser{
 				studentDemand.setSemesterId(Integer.parseInt(studentRow[2]));
 				studentDemands.add(studentDemand);
 				
-				addToStudentHashMap(studentRow);
-				addToCourseDemandHashMap(studentRow);
+	//			addToStudentHashMap(studentRow);
+	//			addToCourseDemandHashMap(studentRow);
 			}
 
 		} catch (FileNotFoundException e) {
@@ -80,6 +80,7 @@ public class StudentDemandFileReader implements FileParser{
 	 * value=Set{courses for the studen} input=studentRow = array[student #,
 	 * course#, semester#)
 	 */
+/*
 	private void addToStudentHashMap(String[] studentRow) {
 		// TODO Auto-generated method stub
 
@@ -141,8 +142,10 @@ public class StudentDemandFileReader implements FileParser{
 		
 
 	}
-
-public List<StudentDemand> getStudentDemand(){
+*/
+	
+	
+public List<StudentDemand> getStudentDemands(){
 	return this.studentDemands;
 }
 
