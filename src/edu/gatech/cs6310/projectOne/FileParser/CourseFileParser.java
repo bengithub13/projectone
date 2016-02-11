@@ -4,11 +4,11 @@ import java.util.List;
 
 import edu.gatech.cs6310.projectOne.entity.Course;
 
-public class CourseFileReader implements AbstractFileReader{
+public class CourseFileParser implements FileParser{
 	private List<Course> courses;
 	
 	
-	public CourseFileReader() {
+	public CourseFileParser() {
 		super();
 	}
 

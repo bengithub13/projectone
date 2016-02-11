@@ -3,10 +3,10 @@ package edu.gatech.cs6310.projectOne.FileParser;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.gatech.cs6310.projectOne.entity.Course;
+
 import edu.gatech.cs6310.projectOne.entity.CourseDependency;
 
-public class CourseDependenciesFileReader implements AbstractFileReader {
+public class CourseDependenciesFileParser implements FileParser {
 	private List<CourseDependency> courseDependencies;
 
 	public List<CourseDependency> getCourseDependencies() {

@@ -1,5 +1,5 @@
 
-package edu.gatech.cs6310.projectOne;
+package edu.gatech.cs6310.projectOne.scheduler;
 
 import java.util.HashMap;
 import java.util.HashSet;

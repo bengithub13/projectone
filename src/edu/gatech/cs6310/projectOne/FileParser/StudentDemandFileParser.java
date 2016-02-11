@@ -12,7 +12,7 @@ import java.util.Set;
 
 import edu.gatech.cs6310.projectOne.entity.StudentDemand;
 
-public class StudentDemandFileReader implements AbstractFileReader{
+public class StudentDemandFileParser implements FileParser{
 
 //	private HashMap<Integer, Set<Integer>> coursesPerStudentHashMap;
 //	private HashMap<Integer, Set<Integer>> coursesTotalDemandHashMap;
@@ -22,7 +22,7 @@ public class StudentDemandFileReader implements AbstractFileReader{
 	private String csvFileName;
 //	private int numberOfStudent = 0;
 
-	public StudentDemandFileReader(String csvFileName) {
+	public StudentDemandFileParser(String csvFileName) {
 		super();
 		this.csvFileName = csvFileName;
 //		coursesPerStudentHashMap = new HashMap<Integer, Set<Integer>>();
