@@ -3,6 +3,7 @@ package edu.gatech.cs6310.projectOne.scheduler;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -46,7 +47,7 @@ public class StudentScheduler implements Scheduler {
 
 	}
 
-	private void setCourseDependencs(List<CourseDependency> courseDependencies) {
+	private void setCourseDependencies(List<CourseDependency> courseDependencies) {
 		this.courseDependencies = courseDependencies;
 
 	}
@@ -56,7 +57,7 @@ public class StudentScheduler implements Scheduler {
 
 		setStudentDemands(studentDemand);
 		setCourses(courses);
-		setCourseDependencs(courseDependencies);
+		setCourseDependencies(courseDependencies);
 		coursesPerStudentHashMap = new HashMap<Integer, Set<Integer>>();
 		countStudentDemand();
 
@@ -213,22 +214,44 @@ public class StudentScheduler implements Scheduler {
 		}
 	}
 
+	/*********************************************************************************************************
+	 * comment out - should iterate through courseHashmap instead since it might
+	 * contain prereqs added private void fillAllStudentCoursesConstraint() {
+	 * try { for (StudentDemand stdemand : studentDemands) {
+	 * 
+	 * GRBLinExpr constraint = new GRBLinExpr(); String constraintName =
+	 * "constraint4 " + "student#" + stdemand.getStudentId() + "course#" +
+	 * stdemand.getCourseId();
+	 * 
+	 * for (int k = 1; k <= TOTAL_SEMESTERS; k++) { constraint.addTerm(1,
+	 * studentCourseSemester[stdemand.getStudentId()][stdemand.getCourseId()][k]
+	 * ); } model.addConstr(constraint, GRB.EQUAL, 1, constraintName); } } catch
+	 * (GRBException e) { e.printStackTrace(); } }
+	 ************************************************************************************************************
+	 */
 	private void fillAllStudentCoursesConstraint() {
 		try {
-			for (StudentDemand stdemand : studentDemands) {
+			for (int i = 1; i <= numOfStudents; i++) {
+				Set<Integer> coursesSet = coursesPerStudentHashMap.get(i);
+				Iterator<Integer> cIterator = coursesSet.iterator();
 
-				GRBLinExpr constraint = new GRBLinExpr();
-				String constraintName = "constraint4 " + "student#" + stdemand.getStudentId() + "course#"
-						+ stdemand.getCourseId();
+				while (cIterator.hasNext()) {
+					int courseNum = cIterator.next();
+					GRBLinExpr constraint = new GRBLinExpr();
+					String constraintName = "constraint4 " + "student#" + i + "course#" + courseNum;
 
-				for (int k = 1; k <= TOTAL_SEMESTERS; k++) {
-					constraint.addTerm(1, studentCourseSemester[stdemand.getStudentId()][stdemand.getCourseId()][k]);
+					for (int k = 1; k <= TOTAL_SEMESTERS; k++) {
+						constraint.addTerm(1, studentCourseSemester[i][courseNum][k]);
+					}
+					model.addConstr(constraint, GRB.EQUAL, 1, constraintName);
 				}
-				model.addConstr(constraint, GRB.EQUAL, 1, constraintName);
+
 			}
+
 		} catch (GRBException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	private void addCourseAvailibiltyContraint() {
@@ -249,6 +272,10 @@ public class StudentScheduler implements Scheduler {
 		}
 	}
 
+	/*
+	 * dependent course cant be taken in 1st semester since it requires
+	 * prerequisite
+	 */
 	private void AddDependCourseSemester1Contraint() {
 		int courseNum = 0;
 		String constraintName = null;
@@ -258,11 +285,14 @@ public class StudentScheduler implements Scheduler {
 				for (CourseDependency courseDependency : courseDependencies) {
 					courseNum = courseDependency.getDependentCourseId();
 					constraintName = "constraint_prereq1-  " + "student#" + i + "course#" + courseNum;
+					/*
+					 * for (int k = 1; k <= TOTAL_SEMESTERS; k++) {
+					 * 
+					 * constraint.addTerm(1,
+					 * studentCourseSemester[i][courseNum][1]); }
+					 */
+					constraint.addTerm(1, studentCourseSemester[i][courseNum][1]);
 
-					for (int k = 1; k <= TOTAL_SEMESTERS; k++) {
-
-						constraint.addTerm(1, studentCourseSemester[i][courseNum][1]);
-					}
 				}
 			}
 
@@ -326,10 +356,15 @@ public class StudentScheduler implements Scheduler {
 	}
 
 	private boolean isCourseDemandByStudent(int studentNumber, int courseNumber) {
+
 		Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
 		if (coursesSet == null) {
 			return false;
 		} else if (coursesSet.contains(courseNumber)) {
+			// testing if prereq requested with dependent course
+		//	checkPrereqRequested(studentNumber, courseNumber);
+			//
+
 			return true;
 		}
 		return false;
@@ -349,12 +384,16 @@ public class StudentScheduler implements Scheduler {
 			addNumOfStudents();
 			coursesSet = new HashSet<Integer>();
 			coursesSet.add(courseNumber);
+
 		} else {
 			coursesSet.add(courseNumber);
+
 		}
 
 		coursesPerStudentHashMap.put(studentNumber, coursesSet);
-
+		// add prereq?
+		addPreRequisite(studentNumber, courseNumber);
+		
 	}
 
 	public void printSchedule() {
@@ -382,6 +421,51 @@ public class StudentScheduler implements Scheduler {
 		catch (GRBException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// add prereq for student if they request dep course without requesting
+	// prereq
+	private void addPreRequisite(int studentNumber, int courseNumber) {
+		for (CourseDependency courseDependency : courseDependencies) {
+			int depCourseNum = courseDependency.getDependentCourseId();
+			int preCourseNum = courseDependency.getPrerequisiteId();
+			if (courseNumber == depCourseNum) { // is prereq in the set of
+												// students request?
+				if (!(coursesPerStudentHashMap.get(studentNumber).contains(preCourseNum))) {
+					// System.out.println("student id=
+					// "+studentNumber+"dependent course "+courseNumber +"does
+					// not have prereq in set prereq= "+preCourseNum +"adding
+					// it");
+					Set<Integer> coursesSet = coursesPerStudentHashMap.get(studentNumber);
+					coursesSet.add(preCourseNum);
+					coursesPerStudentHashMap.put(studentNumber, coursesSet);
+				}
+
+			}
+		}
+
+	}
+
+
+	private void checkPrereqRequested(int studentNumber, int courseNumber) {
+		for (CourseDependency courseDependency : courseDependencies) {
+			int depCourseNum = courseDependency.getDependentCourseId();
+			int preCourseNum = courseDependency.getPrerequisiteId();
+			if (courseNumber == depCourseNum) { // is prereq in the set of
+												// students request?
+				if (coursesPerStudentHashMap.get(studentNumber).contains(preCourseNum)) {
+					// System.out.println("student id= "+studentNumber+"
+					// dependent course "+courseNumber +"has the prereq in set
+					// prereq= "+preCourseNum);
+				} else {
+					System.out.println("student id= " + studentNumber + "dependent course " + courseNumber
+							+ "does not have prereq in set prereq= " + preCourseNum);
+
+				}
+
+			}
+		}
+
 	}
 
 }

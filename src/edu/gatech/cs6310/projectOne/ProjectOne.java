@@ -22,7 +22,7 @@ public class ProjectOne {
 
 		System.out.printf("X=%.2f\n", scheduler.getObjectiveValue());
 		
-	//	scheduler.printSchedule();
+		//scheduler.printSchedule();
 	}
 
 }
