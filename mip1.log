@@ -2634,6 +2634,7 @@ Thread count was 4 (of 4 available processors)
 Optimal solution found (tolerance 1.00e-04)
 Best objective 1.070000000000e+02, best bound 1.070000000000e+02, gap 0.0%
 
+<<<<<<< HEAD
 Gurobi 6.5.0 (win32) logging started 02/06/16 02:23:46
 
 Optimize a model with 25416 rows, 129601 columns and 307416 nonzeros
@@ -2728,4 +2729,652 @@ Gurobi 6.5.0 (win32) logging started 02/06/16 02:33:58
 
 
 Gurobi 6.5.0 (win32) logging started 02/06/16 02:37:32
+=======
+Gurobi 6.5.0 (win32) logging started 02/04/16 16:36:30
+
+Optimize a model with 25416 rows, 129601 columns and 307416 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 1e+00]
+  Objective range [1e+00, 1e+00]
+  Bounds range    [1e+00, 6e+02]
+  RHS range       [1e+00, 2e+00]
+Found heuristic solution: objective 120
+Presolve removed 10880 rows and 72880 columns
+Presolve time: 1.57s
+Presolved: 14536 rows, 56721 columns, 170296 nonzeros
+Variable types: 0 continuous, 56721 integer (56720 binary)
+
+Root relaxation: objective 1.062500e+02, 12068 iterations, 2.30 seconds
+Total elapsed time = 5.34s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  106.25000    0    7  120.00000  106.25000  11.5%     -    5s
+H    0     0                     107.0000000  106.25000  0.70%     -    6s
+
+Explored 0 nodes (19455 simplex iterations) in 6.05 seconds
+Thread count was 4 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.070000000000e+02, best bound 1.070000000000e+02, gap 0.0%
+
+Gurobi 6.5.0 (win32) logging started 02/04/16 23:51:27
+
+Optimize a model with 25416 rows, 129601 columns and 307416 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 1e+00]
+  Objective range [1e+00, 1e+00]
+  Bounds range    [1e+00, 6e+02]
+  RHS range       [1e+00, 2e+00]
+Found heuristic solution: objective 120
+Presolve removed 10880 rows and 72880 columns
+Presolve time: 1.01s
+Presolved: 14536 rows, 56721 columns, 170296 nonzeros
+Variable types: 0 continuous, 56721 integer (56720 binary)
+
+Root relaxation: objective 1.062500e+02, 12068 iterations, 0.98 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  106.25000    0    7  120.00000  106.25000  11.5%     -    3s
+H    0     0                     107.0000000  106.25000  0.70%     -    3s
+
+Explored 0 nodes (19455 simplex iterations) in 3.79 seconds
+Thread count was 4 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.070000000000e+02, best bound 1.070000000000e+02, gap 0.0%
+
+Gurobi 6.5.0 (win32) logging started 02/04/16 23:58:18
+
+Optimize a model with 25416 rows, 129601 columns and 307416 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 1e+00]
+  Objective range [1e+00, 1e+00]
+  Bounds range    [1e+00, 6e+02]
+  RHS range       [1e+00, 2e+00]
+Found heuristic solution: objective 120
+Presolve removed 10880 rows and 72880 columns
+Presolve time: 1.59s
+Presolved: 14536 rows, 56721 columns, 170296 nonzeros
+Variable types: 0 continuous, 56721 integer (56720 binary)
+
+Root relaxation: objective 1.062500e+02, 12068 iterations, 2.06 seconds
+Total elapsed time = 5.22s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  106.25000    0    7  120.00000  106.25000  11.5%     -    5s
+H    0     0                     107.0000000  106.25000  0.70%     -    5s
+
+Explored 0 nodes (19455 simplex iterations) in 5.87 seconds
+Thread count was 4 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.070000000000e+02, best bound 1.070000000000e+02, gap 0.0%
+
+Gurobi 6.5.0 (win32) logging started 02/04/16 23:59:03
+
+Optimize a model with 58417 rows, 129601 columns and 540816 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 2e+01]
+  Objective range [1e+00, 1e+00]
+  Bounds range    [1e+00, 6e+02]
+  RHS range       [1e+00, 2e+00]
+Found heuristic solution: objective 161
+Presolve removed 38763 rows and 76478 columns
+Presolve time: 2.82s
+Presolved: 19654 rows, 53123 columns, 207675 nonzeros
+Variable types: 0 continuous, 53123 integer (53122 binary)
+
+Root relaxation: objective 1.062500e+02, 10460 iterations, 1.22 seconds
+Total elapsed time = 5.25s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  106.25000    0    5  161.00000  106.25000  34.0%     -    5s
+H    0     0                     107.0000000  106.25000  0.70%     -    5s
+
+Explored 0 nodes (16656 simplex iterations) in 5.97 seconds
+Thread count was 4 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.070000000000e+02, best bound 1.070000000000e+02, gap 0.0%
+
+Gurobi 6.5.0 (win32) logging started 02/04/16 23:59:34
+
+Optimize a model with 58417 rows, 129601 columns and 540816 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 2e+01]
+  Objective range [1e+00, 1e+00]
+  Bounds range    [1e+00, 6e+02]
+  RHS range       [1e+00, 2e+00]
+Found heuristic solution: objective 161
+Presolve removed 38763 rows and 76478 columns
+Presolve time: 2.89s
+Presolved: 19654 rows, 53123 columns, 207675 nonzeros
+Variable types: 0 continuous, 53123 integer (53122 binary)
+
+Root relaxation: objective 1.062500e+02, 10460 iterations, 1.31 seconds
+Total elapsed time = 5.13s
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  106.25000    0    5  161.00000  106.25000  34.0%     -    6s
+H    0     0                     107.0000000  106.25000  0.70%     -    6s
+
+Explored 0 nodes (16656 simplex iterations) in 6.15 seconds
+Thread count was 4 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 1.070000000000e+02, best bound 1.070000000000e+02, gap 0.0%
+
+Gurobi 6.5.0 (win32) logging started 02/05/16 00:00:12
+
+Optimize a model with 1068 rows, 2161 columns and 6622 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 2e+01]
+  Objective range [1e+00, 1e+00]
+  Bounds range    [1e+00, 1e+01]
+  RHS range       [1e+00, 2e+00]
+Found heuristic solution: objective 4
+Presolve removed 836 rows and 1825 columns
+Presolve time: 0.02s
+Presolved: 232 rows, 336 columns, 1153 nonzeros
+Variable types: 0 continuous, 336 integer (335 binary)
+
+Root relaxation: objective 2.000000e+00, 88 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0       2.0000000    2.00000  0.00%     -    0s
+
+Explored 0 nodes (88 simplex iterations) in 0.03 seconds
+Thread count was 4 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.000000000000e+00, best bound 2.000000000000e+00, gap 0.0%
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 02:47:49
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 02:48:32
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 02:48:55
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 03:18:29
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 03:30:03
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 05:02:03
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 05:03:17
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 05:03:42
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 05:03:57
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 17:10:00
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:46:48
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:47:14
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:48:28
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:49:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:50:42
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:52:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:53:01
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 19:53:09
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 20:52:09
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 20:59:50
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 22:43:37
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 22:55:53
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 22:58:12
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:00:37
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:00:53
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:01:10
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:01:32
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:02:05
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:12:13
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:12:37
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:12:56
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:13:10
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:13:18
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:13:40
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:13:50
+
+
+Gurobi 6.5.0 (win32) logging started 02/06/16 23:49:28
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 00:56:28
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:00:18
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:00:24
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:00:38
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:07:15
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:07:31
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:08:16
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:08:48
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:10:39
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:11:10
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:11:26
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:11:52
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:12:45
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:26:57
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:28:14
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:30:20
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:31:09
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:32:46
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:32:58
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:33:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:34:52
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:35:59
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:38:46
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:38:57
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:41:22
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:41:37
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:42:43
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:45:15
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:45:42
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:47:23
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:49:07
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 01:59:56
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:00:06
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:00:19
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:13:09
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:13:21
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:15:32
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:35:57
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:36:39
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:37:17
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:37:58
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:38:21
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:39:54
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:40:14
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:43:13
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 02:43:30
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:09:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:19:54
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:20:49
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:21:13
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:23:36
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:41:55
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:47:10
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:47:44
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:48:12
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:48:39
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:51:22
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:53:35
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:56:44
+
+
+Gurobi 6.5.0 (win32) logging started 02/07/16 23:59:38
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:00:59
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:11:26
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:11:42
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:17:35
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:33:50
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:35:32
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:35:46
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:42:29
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:46:06
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 00:59:32
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:02:30
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:04:42
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:12:44
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:14:16
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:15:33
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:19:24
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:22:37
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 01:38:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 02:00:49
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 02:01:05
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 02:39:37
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 09:54:20
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 09:57:25
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 13:52:29
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 13:55:01
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 13:57:50
+
+
+Gurobi 6.5.0 (win32) logging started 02/08/16 14:04:46
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:01:09
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:03:04
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:03:17
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:03:50
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:07:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:12:34
+
+
+Gurobi 6.5.0 (win32) logging started 02/09/16 01:17:15
+
+
+Gurobi 6.5.0 (win32) logging started 02/10/16 00:11:41
+
+
+Gurobi 6.5.0 (win32) logging started 02/10/16 01:25:25
+
+
+Gurobi 6.5.0 (win32) logging started 02/10/16 22:48:53
+
+
+Gurobi 6.5.0 (win32) logging started 02/10/16 22:49:25
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 00:48:13
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 00:57:30
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:33:02
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:34:07
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:34:48
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:49:39
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:51:58
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:53:38
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 19:54:18
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:09:23
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:09:47
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:13:31
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:16:35
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:18:27
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:18:35
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:18:52
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 20:19:19
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 21:00:23
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 21:03:54
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 21:04:32
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 21:09:01
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 22:26:41
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 22:27:03
+
+
+Gurobi 6.5.0 (win32) logging started 02/11/16 22:30:44
+
+
+Gurobi 6.5.0 (win32) logging started 02/13/16 00:01:58
+>>>>>>> refs/heads/refactor1
 
